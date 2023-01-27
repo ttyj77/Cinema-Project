@@ -1,65 +1,59 @@
 package Controller;
 
-import Model.MemberDto;
+import Model.MemberDTO;
 
 import java.util.ArrayList;
 
 public class MemberController {
-    private ArrayList<MemberDto> list;
+    private ArrayList<MemberDTO> list;
     private int nextId;
-    private int LEVER_GENERAL = 1;
-    private int LEVER_CRITIC = 2;
-    private int LEVER_ADMIN = 3;
+
+    private final int LEVEL_GENERAL = 1;
+    private final int LEVEL_CRITIC = 2;
+    private final int LEVEL_ADMIN = 3;
 
     public MemberController() {
         list = new ArrayList<>();
         nextId = 1;
 
-        MemberDto memberDto = new MemberDto();
-        memberDto.setId(nextId++);
-        memberDto.setPassword("9");
-        memberDto.setRole(LEVER_ADMIN);
-        memberDto.setNickname("관리자닉");
-        memberDto.setUsername("9");
-        list.add(memberDto);
+        MemberDTO m = new MemberDTO();
+        m.setId(nextId++);
+        m.setUsername("a");
+        m.setPassword("a");
+        m.setNickname("관리자 1");
+        m.setLevel(LEVEL_ADMIN);
+
+        list.add(m);
 
         addSampleData();
-
     }
 
-    private void addSampleData(){
-        //평론가
-        for (int i=0; i<=3; i++){
-            MemberDto m = new MemberDto();
+    private void addSampleData() {
+        // 평론가 아이디 추가
+        for (int i = 1; i <= 3; i++) {
+            MemberDTO m = new MemberDTO();
             m.setId(nextId++);
             m.setUsername("C" + i);
             m.setPassword("1");
-            m.setNickname("평론가" + i);
-            m.setRole(LEVER_CRITIC);
+            m.setNickname("평론가 " + i);
+            m.setLevel(LEVEL_CRITIC);
             list.add(m);
         }
 
-        //일반 사용자
-        for (int i =0; i<=3; i++){
-            MemberDto m = new MemberDto();
-            m.setId(nextId++);
+        // 일반사용자 아이디 추가
+        for (int i = 1; i <= 3; i++) {
+            MemberDTO m = new MemberDTO();
             m.setUsername("G" + i);
             m.setPassword("1");
-            m.setNickname("일반사용자" + i);
-            m.setRole(LEVER_CRITIC);
-            list.add(m);
+            m.setNickname("일반 사용자 " + i);
+            add(m);
         }
-
-
     }
 
-
-
-
-    public void add(MemberDto memberDto) {
-        memberDto.setId(nextId++);
-        memberDto.setRole(LEVER_GENERAL);
-        list.add(memberDto);
+    public void add(MemberDTO memberDTO) {
+        memberDTO.setId(nextId++);
+        memberDTO.setLevel(LEVEL_GENERAL);
+        list.add(memberDTO);
     }
 
     public boolean validateUsername(String username) {
@@ -67,8 +61,8 @@ public class MemberController {
             return false;
         }
 
-        for (MemberDto u : list) {
-            if (username.equalsIgnoreCase(u.getUsername())) {
+        for (MemberDTO m : list) {
+            if (username.equalsIgnoreCase(m.getUsername())) {
                 return false;
             }
         }
@@ -76,30 +70,47 @@ public class MemberController {
         return true;
     }
 
-    public MemberDto auth(String username, String password) {
-        for (MemberDto u : list) {
-            if (username.equalsIgnoreCase(u.getUsername()) && password.equals(u.getPassword())) {
-
-                return new MemberDto(u);
+    public MemberDTO auth(String username, String password) {
+        for (MemberDTO m : list) {
+            if (username.equalsIgnoreCase(m.getUsername()) && password.equals(m.getPassword())) {
+                return new MemberDTO(m);
             }
         }
-
         return null;
     }
 
-    public void update(MemberDto memberDto) {
-        list.set(list.indexOf(memberDto), memberDto);
+    public void update(MemberDTO memberDTO) {
+        list.set(list.indexOf(memberDTO), memberDTO);
     }
 
     public void delete(int id) {
-        list.remove(new MemberDto(id));
-//        managerList.remove(new MemberDto(id));
-//        reviewerList.remove(new MemberDto(id));
+        list.remove(new MemberDTO(id));
     }
 
     public void rankUp(int id, int level) {
-        MemberDto m = new MemberDto(id);
-        list.get(list.indexOf(m)).setRole(level);
+        MemberDTO m = new MemberDTO(id);
+        list.get(list.indexOf(m)).setLevel(level);
     }
 
+    public String selectNickname(int id) {
+        MemberDTO m = new MemberDTO(id);
+        int index = list.indexOf(m);
+        return list.get(index).getNickname();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
